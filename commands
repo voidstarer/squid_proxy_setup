@@ -1,0 +1,252 @@
+## First of all this guide will help you to install squid3 server on
+Ubuntu with single IP and multiple ports
+## with Firewall rules you should run all commands using "root" user
+or "sudo" command
+###################################################################
+# Step 1 Squid Installation
+apt-get update
+apt-get upgrade
+apt-get install apache2-utils squid3 iptables-persistent -y
+# Step 2 adding user to use it with proxy server
+htpasswd -c /etc/squid3/passwd user1
+## If you want to add other user
+htpasswd /etc/squid3/passwd user2
+# Step 3 configure Squid3
+cp /etc/squid3/squid.conf /etc/squid3/squid.conf.backup
+echo "" > /etc/squid3/squid.conf
+## Open configuration file press < i > to go in insert mode so you can
+edit this file
+vim /etc/squid3/squid.conf
+## Then add below line in squid.conf file
+###################################################################
+### Port configuration section ###
+http_port 7009
+http_port 9089
+http_port 9057
+http_port 9025
+http_port 7010
+http_port 9090
+http_port 9058
+http_port 9026
+http_port 7011
+http_port 9091
+http_port 9059
+http_port 9027
+http_port 7012
+http_port 9092
+http_port 9060
+http_port 9028
+http_port 7013
+http_port 9093
+http_port 9061
+http_port 9029
+http_port 7014 
+http_port 9094
+http_port 9062
+http_port 9030
+http_port 7015
+http_port 9095
+http_port 9063
+http_port 9031
+http_port 7016
+http_port 9096
+http_port 9064
+http_port 9032
+http_port 9000
+http_port 7017
+http_port 9097
+http_port 9065
+http_port 9033
+http_port 9001
+http_port 7018
+http_port 9098
+http_port 9066
+http_port 9034
+http_port 9002
+http_port 7019
+http_port 9099
+http_port 9067
+http_port 9035
+http_port 9003
+http_port 7020
+http_port 9068
+http_port 9036
+http_port 9004
+http_port 7021
+http_port 9069
+http_port 9037
+http_port 9005
+http_port 7022
+http_port 9070
+http_port 9038
+http_port 9006
+http_port 7023
+http_port 9071
+http_port 9039
+http_port 9007
+http_port 7024
+http_port 9072
+http_port 9040
+http_port 9008
+http_port 7025
+http_port 9073
+http_port 9041 
+http_port 9009
+http_port 7026
+http_port 9074
+http_port 9042
+http_port 9010
+http_port 9075
+http_port 9043
+http_port 9011
+http_port 9076
+http_port 9044
+http_port 9012
+http_port 9077
+http_port 9045
+http_port 9013
+http_port 9078
+http_port 9046
+http_port 9014
+http_port 9079
+http_port 9047
+http_port 9015
+http_port 7000
+http_port 9080
+http_port 9048
+http_port 9016
+http_port 3128
+http_port 7001
+http_port 9081
+http_port 9049
+http_port 9017
+http_port 7002
+http_port 9082
+http_port 9050
+http_port 9018
+http_port 7003
+http_port 9083
+http_port 9051
+http_port 9019
+http_port 7004
+http_port 9084
+http_port 9052
+http_port 9020
+http_port 7005
+http_port 9085
+http_port 9053
+http_port 9021
+http_port 7006
+http_port 9086
+http_port 9054
+http_port 9022
+http_port 7007 
+http_port 9087
+http_port 9055
+http_port 9023
+http_port 7008
+http_port 9088
+http_port 9056
+http_port 9024
+### End of Port configuration section ###
+cache deny all
+hierarchy_stoplist cgi-bin ?
+access_log none
+cache_store_log none
+cache_log /dev/null
+refresh_pattern ^ftp: 1440 20% 10080
+refresh_pattern ^gopher: 1440 0% 1440
+refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
+refresh_pattern . 0 20% 4320
+acl localhost src 127.0.0.1/32 ::1
+acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
+acl SSL_ports port 1-65535
+acl Safe_ports port 1-65535
+acl CONNECT method CONNECT
+acl siteblacklist dstdomain "/etc/squid3/blacklist.acl"
+http_access allow manager localhost
+http_access deny manager
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access deny siteblacklist
+auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid3/
+passwd
+auth_param basic children 5
+auth_param basic realm Squid proxy-caching web server
+auth_param basic credentialsttl 2 hours
+acl password proxy_auth REQUIRED
+http_access allow localhost
+http_access allow password
+http_access deny all
+forwarded_for off
+request_header_access Allow allow all
+request_header_access Authorization allow all
+request_header_access WWW-Authenticate allow all
+request_header_access Proxy-Authorization allow all
+request_header_access Proxy-Authenticate allow all
+request_header_access Cache-Control allow all
+request_header_access Content-Encoding allow all
+request_header_access Content-Length allow all
+request_header_access Content-Type allow all
+request_header_access Date allow all
+request_header_access Expires allow all
+request_header_access Host allow all
+request_header_access If-Modified-Since allow all
+request_header_access Last-Modified allow all
+request_header_access Location allow all
+request_header_access Pragma allow all
+request_header_access Accept allow all
+request_header_access Accept-Charset allow all
+request_header_access Accept-Encoding allow all
+request_header_access Accept-Language allow all
+request_header_access Content-Language allow all
+request_header_access Mime-Version allow all
+request_header_access Retry-After allow all
+request_header_access Title allow all
+request_header_access Connection allow all
+request_header_access Proxy-Connection allow all
+request_header_access User-Agent allow all
+request_header_access Cookie allow all
+request_header_access All deny all
+###################################################################
+## Now you want to add more ports to squid
+## at first of file ant Port configuration section you should add
+http_port PORT
+<<Like thoset>>
+http_port 4040
+http_port 5050
+## Now configration finished save squid.conf file and close
+## To save and close the file press <Esc> then < Ctrl : > then write <
+wq! > then press < Enter>
+###################################################################
+# Step 4 Firewall Configuration
+# run rule like that
+iptables -I INPUT -p tcp --dport PORT -j ACCEPT
+<< Like those rule >>
+iptables -I INPUT -p tcp --dport 4040 -j ACCEPT
+iptables -I INPUT -p tcp --dport 5050 -j ACCEPT
+## You should do that with all port you will add to squid.conf file
+## then run those rules as it is
+iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -j DROP
+###################################################################
+# Step 5 run those commands to save firewall rules
+service iptables-persistent save
+service iptables-persistent restart
+###################################################################
+# Step 6 run this command to restart your squid server
+service squid3 restart
+###################################################################
+## Now your squid server ready to Go with your server IP address and
+ports you add to squid configuration
+###################################################################
+###################################################################
+## To allow ICMP use this rule
+iptables -D INPUT -j DROP
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A INPUT -j DROP
+service iptables-persistent save
+service iptables-persistent restart
+###################################################################
