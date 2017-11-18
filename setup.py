@@ -17,6 +17,20 @@ def apt_update():
         print "Success"
     return p.returncode
 
+
+def apt_upgrade():
+    '''
+    function to upgrade the Packages
+    '''
+    from subprocess import STDOUT, check_call, PIPE, Popen
+    # a = check_call(['apt-get', 'install', '-y', packagetoinstall], stdout=STDOUT, stderr=STDOUT)
+    p = Popen(['apt-get', 'upgrade'], stdout=PIPE)
+    print p.communicate()
+    if p.returncode is 0 :
+        print "Success"
+    return p.returncode
+
+
 def apt_install(packagetoinstall):
     '''
     function to install packages
@@ -55,12 +69,19 @@ def main():
                     print "Update Success"
                 else :
                     print "Something failed, try again later or communicate to Debapriya"
+
+                if apt_upgrade() is 0 :
+                    print "Update Success"
+                else :
+                    print "Something failed, try again later or communicate to Debapriya"
+
                 packagetoinstall = "sl"
                 if apt_install(packagetoinstall) is 0 :
                     print "Install Success"
                 else :
                     print "Something failed, try again later or communicate to Debapriya"
                     exit(-9)
+
 
         elif sys.platform is 'darwin':
             print "Okay, you have a Mac, work in progress!"
