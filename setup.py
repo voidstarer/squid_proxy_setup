@@ -99,13 +99,19 @@ def configuration_copy_handler(newfile):
     print backuppath
     print "creating backup ... "
     filepath = basepath + os.sep + filename
-    p = mycopy(filepath)
+    p = mycopy(filepath, backuppath)
     if p is not 0 :
         print "backup didnt happen, some issues with Copying...let's contact Debapriya"
         exit(-13)
     print "Backup Done, time to rewrite the configuration file now"
     deleteContent(filepath)
-    
+    print "Deleted file contents..."
+    p = mycopy(newfile,filepath)
+    if p is not 0 :
+        print "new file copy didnt happen, some issues with Copying...let's contact Debapriya"
+        exit(-13)
+    print "new file replaced"
+
 
 
 def adduser(username, password):
@@ -128,7 +134,7 @@ def handlemultipleuseradd(userdict):
     '''
     status = 0
     from subprocess import STDOUT, check_call, PIPE, Popen
-      if os.path.exists(PASSWD_FILE) is False:
+    if os.path.exists(PASSWD_FILE) is False:
         print "passwd path does not exist"
         print "creating one ...."
         p = Popen(['touch', PASSWD_FILE], stdout=PIPE)
@@ -152,6 +158,36 @@ def handlemultipleuseradd(userdict):
 
         print "Added all users from list ..."
         return status
+
+
+
+
+def getportlist(conffile):
+    '''
+    read configuration file and extract port numbers
+    '''
+    portlist = ['22'] # will have SSH by default
+    file = open(conffile,'r')
+    lines = file.readlines()
+    for line in lines:
+        if line[0] is not '#' and "http_port" in line and line[0] is 'h':
+            http_port, port = line.split()
+            portlist.append(port)
+
+    file.close()
+    return portlist
+
+
+def handleservice(package, command):
+    if command not in ['save', 'restart', 'stop']:
+        print "Invalid command"
+        return -13
+    from subprocess import STDOUT, check_call, PIPE, Popen
+    p = Popen(['service', package, command], stdout=PIPE)
+    print p.communicate()
+    if p.returncode is 0 :
+        print "Success"
+    return p.returncode
 
 
 
