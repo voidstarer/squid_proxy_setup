@@ -8,7 +8,7 @@ import shutil
 
 
 SQUID_CONFIGURATION_PATH = "/etc/squid3/squid.conf"
-
+PASSWD_FILE = "/etc/squid3/passwd"
 
 def apt_update():
     '''
@@ -71,10 +71,20 @@ def mycopy(pathfrom, topath):
 def deleteContent(fName):
     '''
     Empty a  file
-    
+
     '''
-    with open(fName, "w"):
-        pass
+    status = -1
+
+    try:
+        with open(fName, "w"):
+            pass
+        status = 0
+    except IOError, PermissionDeniedError:
+        print IOError
+        print PermissionDeniedError
+        print "File as not able to modify"
+
+    return status
 
 
 def configuration_copy_handler(newfile):
@@ -93,7 +103,55 @@ def configuration_copy_handler(newfile):
     if p is not 0 :
         print "backup didnt happen, some issues with Copying...let's contact Debapriya"
         exit(-13)
-    print "Backup Done, time to rewrite the conf file now"
+    print "Backup Done, time to rewrite the configuration file now"
+    deleteContent(filepath)
+    
+
+
+def adduser(username, password):
+    '''
+    a function that takes an Username and Password and creates the user
+    '''
+    from subprocess import STDOUT, check_call, PIPE, Popen
+    # a = check_call(['apt-get', 'install', '-y', packagetoinstall], stdout=STDOUT, stderr=STDOUT)
+    p = Popen(['htpasswd', '-b', PASSWD_FILE, username, password], stdout=PIPE)
+    print p.communicate()
+    if p.returncode is 0 :
+        print "Success in adding user %s", username
+    return p.returncode
+
+
+def handlemultipleuseradd(userdict):
+    '''
+    This function area is for multiple user addition
+
+    '''
+    status = 0
+    from subprocess import STDOUT, check_call, PIPE, Popen
+      if os.path.exists(PASSWD_FILE) is False:
+        print "passwd path does not exist"
+        print "creating one ...."
+        p = Popen(['touch', PASSWD_FILE], stdout=PIPE)
+        print p.communicate()
+        if p.returncode is not 0 :
+            print PASSWD_FILE + "File creation failed"
+            print "Exiting.."
+            status = -13
+            exit(-13)
+        else :
+            print "File got created..."
+            status = 1
+        for user in userdict.keys:
+            password = userdict[user]
+            status = adduser(user, password)
+            if status is not 0 :
+                print "Some Error while adding users..."
+                break
+            else:
+                status = 0
+
+        print "Added all users from list ..."
+        return status
 
 
 
