@@ -259,7 +259,7 @@ def firewall_configuration(conffilepath):
     handleservice("iptables-persistent", "save")
     handleservice("iptables-persistent", "restart")
 
-    handleservice("squid", "restart")
+    handleservice("squid3", "restart")
 
     print "Done!"
 
@@ -290,7 +290,7 @@ def main():
                 + platform.linux_distribution()[0] + " " \
                 + platform.linux_distribution()[1] + " " \
                 + platform.linux_distribution()[2]
-                if str(platform.linux_distribution()[1]) is not "14.04":
+                if "trusty" not in platform.linux_distribution()[2] :
                     print "only for 14.04, run on 14.04 only"
                     exit(-14)
 
