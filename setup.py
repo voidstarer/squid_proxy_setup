@@ -93,6 +93,17 @@ def deleteContent(fName):
 
     return status
 
+def iptables_install():
+    servicefilepath = "/etc/init.d"
+    file = "iptables-persistent"
+
+    pathto = servicefilepath + os.sep + file
+    print pathto
+    print mycopy(file, servicefilepath)
+    print os.chmod(servicefilepath, 0755)
+    command = "update-rc.d iptables defaults"
+    print os.system(command)
+
 
 def configuration_copy_handler(newfile):
     '''
@@ -154,9 +165,10 @@ def handlemultipleuseradd(userdict):
         else :
             print "File got created..."
             status = 1
-        for user in userdict.keys:
+        for user in userdict.keys():
             password = userdict[user]
             status = adduser(user, password)
+            print password, status
             if status is not 0 :
                 print "Some Error while adding users..."
                 break
@@ -220,6 +232,10 @@ def iptable_exec(exec_string):
 def firewall_configuration(conffilepath):
     space = " "
     ports = getportlist(conffilepath)
+    print "list of ports : "
+    print ports
+    if 'PORT' in ports:
+        ports.remove('PORT')
     for port in ports:
         rulestring = "-I INPUT -p tcp --dport" + space + port + space + "-j ACCEPT"
         status = iptable_exec(rulestring)
@@ -243,7 +259,7 @@ def firewall_configuration(conffilepath):
     handleservice("iptables-persistent", "save")
     handleservice("iptables-persistent", "restart")
 
-    handleservice("squid3", "restart")
+    handleservice("squid", "restart")
 
     print "Done!"
 
@@ -270,11 +286,15 @@ def main():
             print "Now checking if you have Ubuntu"
             if 'ubuntu' or 'Ubuntu' in platform.linux_distribution():
                 print platform.linux_distribution()
-                print "Yippeeeee! you have an Ubuntu OS : " \
+                print "You have an Ubuntu OS : " \
                 + platform.linux_distribution()[0] + " " \
                 + platform.linux_distribution()[1] + " " \
                 + platform.linux_distribution()[2]
-
+                if platform.linux_distribution()[1] is not "14.04":
+                    print "only for 14.04, run on 14.04 only"
+                    exit(-14)
+                    
+                print "Yippee!"
                 print "Now Time for work!!"
                 if apt_update() is 0 :
                     print "Update Success"

@@ -20,7 +20,7 @@ http_port 7013
 http_port 9093
 http_port 9061
 http_port 9029
-http_port 7014 
+http_port 7014
 http_port 9094
 http_port 9062
 http_port 9030
@@ -70,7 +70,7 @@ http_port 9040
 http_port 9008
 http_port 7025
 http_port 9073
-http_port 9041 
+http_port 9041
 http_port 9009
 http_port 7026
 http_port 9074
@@ -120,7 +120,7 @@ http_port 7006
 http_port 9086
 http_port 9054
 http_port 9022
-http_port 7007 
+http_port 7007
 http_port 9087
 http_port 9055
 http_port 9023
@@ -146,6 +146,7 @@ acl CONNECT method CONNECT
 acl siteblacklist dstdomain "/etc/squid3/blacklist.acl"
 http_access allow manager localhost
 http_access deny manager
+http_access allow all
 http_access deny !Safe_ports
 http_access deny CONNECT !SSL_ports
 http_access deny siteblacklist
@@ -157,7 +158,7 @@ auth_param basic credentialsttl 2 hours
 acl password proxy_auth REQUIRED
 http_access allow localhost
 http_access allow password
-http_access deny all
+http_access allow all
 forwarded_for off
 request_header_access Allow allow all
 request_header_access Authorization allow all
@@ -193,7 +194,8 @@ request_header_access All deny all
 
 ## Now if you want to add more ports to squid
 ## at first of file ant Port configuration section you should add
-http_port PORT
+
 <<Like this>>
+http_port PORT
 http_port 4040
 http_port 5050
