@@ -1,6 +1,6 @@
 How to use this :
 
-1. Make sure you have Python2.7 Enabled
+1. Make sure you have Python2.7 installed
 2. Check the file squid.conf.file and verify if this is the configuration you want
 3. open the setup.py and check in main function
              line 299   userdict = {'user1':'admin', 'user2':'admin'}
@@ -8,6 +8,7 @@ How to use this :
 
 
         if both of them are correct, if not update with your values, I will provide CMD Params support in future
+        add your users and their respective passwords
 
 4. if everything is Fine, just run python setup.py and enjoy!
 
