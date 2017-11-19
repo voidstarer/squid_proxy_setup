@@ -1,5 +1,12 @@
 #!/usr/bin/env python2
 
+'''
+
+@Author : Debapriya Das
+@Email : yodebu@gmail.com
+
+'''
+
 
 import os
 import sys
@@ -192,6 +199,58 @@ def handleservice(package, command):
 
 
 
+def iptable_exec(exec_string):
+    '''
+    takes an IPTable command string and executes it
+    '''
+
+    iptable = ["iptables"]
+    commandlist = exec_string.split()
+    for command in commandlist:
+        iptable.append(command)
+    from subprocess import STDOUT, check_call, PIPE, Popen
+    p = Popen(iptable, stdout=PIPE)
+    print p.communicate()
+    if p.returncode is 0 :
+        print "Success"
+    return p.returncode
+
+
+
+def firewall_configuration(conffilepath):
+    space = " "
+    ports = getportlist(conffilepath)
+    for port in ports:
+        rulestring = "-I INPUT -p tcp --dport" + space + port + space + "-j ACCEPT"
+        status = iptable_exec(rulestring)
+        if status is not 0:
+            print "Something is wrong...call Debapriya"
+            exit(-5)
+
+    iptable_exec("-A INPUT -i lo -j ACCEPT")
+    iptable_exec("-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT")
+    iptable_exec("-A INPUT -j DROP")
+
+    handleservice("iptables-persistent", "save")
+    handleservice("iptables-persistent", "restart")
+
+    handleservice("squid3", "restart")
+
+    iptable_exec("-D INPUT -j DROP")
+    iptable_exec("-A INPUT -p icmp -j ACCEPT")
+    iptable_exec("-A INPUT -j DROP")
+
+    handleservice("iptables-persistent", "save")
+    handleservice("iptables-persistent", "restart")
+
+    handleservice("squid3", "restart")
+
+    print "Done!"
+
+
+
+
+
 def main():
     '''
     Main() : main functionality of the code
@@ -227,7 +286,7 @@ def main():
                 else :
                     print "Something failed, try again later or communicate to Debapriya"
 
-                packagestoinstall = ["sl"]
+                packagestoinstall = ["apache2-utils", "squid3", "iptables-persistent"]
                 for packagetoinstall in packagestoinstall:
                     if apt_install(packagetoinstall) is 0 :
                         print "Install Success"
@@ -236,7 +295,18 @@ def main():
                         exit(-9)
 
                 print "Installation of all packages complete, time to configure ....."
-                print copy("file1", "file2")
+
+                userdict = {'user1':'admin', 'user2':'admin'}
+                squidconfig = "squid.conf.file"
+
+                handlemultipleuseradd(userdict)
+                print "Added users"
+                configuration_copy_handler(squidconfig)
+                print "Copied my config file"
+                firewall_configuration(SQUID_CONFIGURATION_PATH)
+                print "Configuration Done...."
+                print "Sucesssfully Completed!"
+                print "Say thanks to Deb"
 
 
 
