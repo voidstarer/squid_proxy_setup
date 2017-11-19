@@ -4,6 +4,11 @@
 import os
 import sys
 import platform
+import shutil
+
+
+SQUID_CONFIGURATION_PATH = "/etc/squid3/squid.conf"
+
 
 def apt_update():
     '''
@@ -44,6 +49,24 @@ def apt_install(packagetoinstall):
         print "Success"
     return p.returncode
 
+def copy(pathfrom, topath):
+    '''
+    Simple Copy handler
+
+    '''
+    status = -1
+    if os.path.exists(pathfrom) is False:
+        print "Path Does not exist"
+        return status
+    try :
+        shutil.copy(pathfrom, topath)
+        status = 0
+    except IOError, PermissionDeniedError:
+        status = -9
+        print IOError
+        print PermissionDeniedError
+    return status
+
 
 
 def main():
@@ -53,6 +76,12 @@ def main():
     if os.name is 'Posix' or 'posix':
         # checking a valid POSIX Shell
         print "Hi " + os.getenv('USER') + ", this looks like a POSIX Shell"
+
+        if os.geteuid() is not 0 :
+            print "This program is supposed to be run as root"
+            print "N00B$ are not supposed to run this"
+            print "May the force be with you, Motherfucker!"
+            exit(-13)
 
         if 'linux' in sys.platform :
             print "Okay, you have a Linux OS, this script is compatible"
@@ -71,17 +100,23 @@ def main():
                     print "Something failed, try again later or communicate to Debapriya"
 
                 if apt_upgrade() is 0 :
-                    print "Update Success"
+                    print "Upgrade Success"
                 else :
                     print "Something failed, try again later or communicate to Debapriya"
 
-                packagestoinstall = ["sl", "ls"]
+                packagestoinstall = ["sl"]
                 for packagetoinstall in packagestoinstall:
                     if apt_install(packagetoinstall) is 0 :
                         print "Install Success"
                     else :
                         print "Something failed, try again later or communicate to Debapriya"
                         exit(-9)
+
+                print "Installation of all packages complete, time to configure ....."
+                print copy("file1", "file2")
+
+
+
 
 
         elif sys.platform is 'darwin':
