@@ -290,10 +290,10 @@ def main():
                 + platform.linux_distribution()[0] + " " \
                 + platform.linux_distribution()[1] + " " \
                 + platform.linux_distribution()[2]
-                if platform.linux_distribution()[1] is not "14.04":
+                if str(platform.linux_distribution()[1]) is not "14.04":
                     print "only for 14.04, run on 14.04 only"
                     exit(-14)
-                    
+
                 print "Yippee!"
                 print "Now Time for work!!"
                 if apt_update() is 0 :
