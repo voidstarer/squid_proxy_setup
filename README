@@ -2,15 +2,34 @@ How to use this :
 
 1. Make sure you have Python2.7 installed
 2. Check the file squid.conf.file and verify if this is the configuration you want
-3. open the setup.py and check in main function
+3. By default these two users are updated for Squid : //let me know if you want them to be modified and user taken input in future
+
+    user1 - admin
+    user2 - admin
+
              line 299   userdict = {'user1':'admin', 'user2':'admin'}
              line 300   squidconfig = "squid.conf.file"
 
 
-        if both of them are correct, if not update with your values, I will provide CMD Params support in future
-        add your users and their respective passwords
-
-4. if everything is Fine, just run python setup.py and enjoy!
 
 
-ps - Run the script as root user, else it will curse you! :D
+4. if everything is Fine, just run bash setup.py and enjoy!
+
+
+ps - Run the script as root user or sudo run it, else it will curse you! :D
+
+
+
+for example : get the zip file in your system and run :
+'''
+sudo bash setup.sh
+'''
+
+
+or run
+'''
+curl https://raw.githubusercontent.com/light-bringer/python-shell/master/setup.sh | sudo bash -s
+'''
+
+
+@Author : Debapriya
