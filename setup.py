@@ -75,12 +75,13 @@ def main():
                 else :
                     print "Something failed, try again later or communicate to Debapriya"
 
-                packagetoinstall = "sl"
-                if apt_install(packagetoinstall) is 0 :
-                    print "Install Success"
-                else :
-                    print "Something failed, try again later or communicate to Debapriya"
-                    exit(-9)
+                packagestoinstall = ["sl", "ls"]
+                for packagetoinstall in packagestoinstall:
+                    if apt_install(packagetoinstall) is 0 :
+                        print "Install Success"
+                    else :
+                        print "Something failed, try again later or communicate to Debapriya"
+                        exit(-9)
 
 
         elif sys.platform is 'darwin':
