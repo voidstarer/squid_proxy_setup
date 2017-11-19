@@ -49,7 +49,7 @@ def apt_install(packagetoinstall):
         print "Success"
     return p.returncode
 
-def copy(pathfrom, topath):
+def mycopy(pathfrom, topath):
     '''
     Simple Copy handler
 
@@ -66,6 +66,35 @@ def copy(pathfrom, topath):
         print IOError
         print PermissionDeniedError
     return status
+
+
+def deleteContent(fName):
+    '''
+    Empty a  file
+    
+    '''
+    with open(fName, "w"):
+        pass
+
+
+def configuration_copy_handler(newfile):
+    '''
+    configuration files properly copy handling
+
+    '''
+    basepath, filename = os.path.split(SQUID_CONFIGURATION_PATH)
+    backupfile = filename + ".backup"
+    print backupfile
+    backuppath = basepath + os.sep + backupfile
+    print backuppath
+    print "creating backup ... "
+    filepath = basepath + os.sep + filename
+    p = mycopy(filepath)
+    if p is not 0 :
+        print "backup didnt happen, some issues with Copying...let's contact Debapriya"
+        exit(-13)
+    print "Backup Done, time to rewrite the conf file now"
+
 
 
 
