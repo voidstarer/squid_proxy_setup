@@ -26,9 +26,11 @@ sudo bash setup.sh
 '''
 
 
-or run
+or run after logging into the server as root user
+
 '''
-curl https://raw.githubusercontent.com/light-bringer/python-shell/master/setup.sh | sudo bash -s
+curl https://raw.githubusercontent.com/light-bringer/python-shell/master/setup.sh
+sudo bash setup.sh
 '''
 
 

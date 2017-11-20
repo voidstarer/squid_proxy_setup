@@ -185,7 +185,7 @@ def getportlist(conffile):
     '''
     read configuration file and extract port numbers
     '''
-    portlist = ['22'] # will have SSH by default
+    portlist = [] # will have SSH by default
     file = open(conffile,'r')
     lines = file.readlines()
     for line in lines:
@@ -243,6 +243,8 @@ def firewall_configuration(conffilepath):
             print "Something is wrong...call Debapriya"
             exit(-5)
 
+    rulestring = "-I INPUT -p tcp --dport" + space + "22" + space + "-j ACCEPT"
+    status = iptable_exec(rulestring)
     iptable_exec("-A INPUT -i lo -j ACCEPT")
     iptable_exec("-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT")
     iptable_exec("-A INPUT -j DROP")
