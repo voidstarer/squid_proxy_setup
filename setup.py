@@ -318,7 +318,7 @@ def main():
 
                 print "Installation of all packages complete, time to configure ....."
 
-                userdict = {'user1':'admin', 'user2':'admin'}
+                userdict = {'user1':"", 'user2':""}
                 squidconfig = "squid.conf.file"
 
                 handlemultipleuseradd(userdict)
