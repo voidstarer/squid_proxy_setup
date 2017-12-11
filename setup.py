@@ -308,7 +308,7 @@ def main():
                 else :
                     print "Something failed, try again later or communicate to Debapriya"
 
-                packagestoinstall = ["apache2-utils", "squid3", "iptables-persistent"]
+                packagestoinstall = ["apache2-utils", "iptables-persistent"]
                 for packagetoinstall in packagestoinstall:
                     if apt_install(packagetoinstall) is 0 :
                         print "Install Success"
