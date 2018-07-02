@@ -298,7 +298,7 @@ def main():
                 + platform.linux_distribution()[0] + " " \
                 + platform.linux_distribution()[1] + " " \
                 + platform.linux_distribution()[2]
-                if "9.4" not in platform.linux_distribution()[2] :
+                if "9.4" not in platform.linux_distribution()[1] :
                     print "only for debian 9.4, run on debian 9.4 only"
                     exit(-14)
 
