@@ -266,7 +266,13 @@ def firewall_configuration(conffilepath):
     print "Done!"
 
 
-
+def load_userdict():
+    myfile = "users.txt"
+    if os.path.exists(myfile):
+        userdict = eval(open(myfile).read())
+    else:
+        userdict = {'user1':"pass1", 'user2':"pass2"}
+    return userdict
 
 
 def main():
@@ -318,7 +324,7 @@ def main():
 
                 print "Installation of all packages complete, time to configure ....."
 
-                userdict = {'user1':"", 'user2':""}
+                userdict = load_userdict()
                 squidconfig = "squid.conf.file"
 
                 handlemultipleuseradd(userdict)
@@ -329,10 +335,6 @@ def main():
                 print "Configuration Done...."
                 print "Sucesssfully Completed!"
                 print "Say thanks to Deb"
-
-
-
-
 
         elif sys.platform is 'darwin':
             print "Okay, you have a Mac, work in progress!"
