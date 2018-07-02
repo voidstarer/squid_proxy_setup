@@ -291,15 +291,15 @@ def main():
 
         if 'linux' in sys.platform :
             print "Okay, you have a Linux OS, this script is compatible"
-            print "Now checking if you have Ubuntu"
-            if 'ubuntu' or 'Ubuntu' in platform.linux_distribution():
+            print "Now checking if you have Debian"
+            if 'debian`' or 'Debian' in platform.linux_distribution():
                 print platform.linux_distribution()
-                print "You have an Ubuntu OS : " \
+                print "You have a Debian OS : " \
                 + platform.linux_distribution()[0] + " " \
                 + platform.linux_distribution()[1] + " " \
                 + platform.linux_distribution()[2]
-                if "trusty" not in platform.linux_distribution()[2] :
-                    print "only for 14.04, run on 14.04 only"
+                if "9.4" not in platform.linux_distribution()[2] :
+                    print "only for debian 9.4, run on debian 9.4 only"
                     exit(-14)
 
                 print "Yippee!"
