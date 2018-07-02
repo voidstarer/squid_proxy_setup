@@ -14,8 +14,8 @@ import platform
 import shutil
 
 
-SQUID_CONFIGURATION_PATH = "/etc/squid3/squid.conf"
-PASSWD_FILE = "/etc/squid3/passwd"
+SQUID_CONFIGURATION_PATH = "/etc/squid/squid.conf"
+PASSWD_FILE = "/etc/squid/passwd"
 
 def apt_update():
     '''
@@ -252,7 +252,7 @@ def firewall_configuration(conffilepath):
     handleservice("iptables-persistent", "save")
     handleservice("iptables-persistent", "restart")
 
-    handleservice("squid3", "restart")
+    handleservice("squid", "restart")
 
     iptable_exec("-D INPUT -j DROP")
     iptable_exec("-A INPUT -p icmp -j ACCEPT")
@@ -261,7 +261,7 @@ def firewall_configuration(conffilepath):
     handleservice("iptables-persistent", "save")
     handleservice("iptables-persistent", "restart")
 
-    handleservice("squid3", "restart")
+    handleservice("squid", "restart")
 
     print "Done!"
 

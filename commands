@@ -1,4 +1,4 @@
-## First of all this guide will help you to install squid3 server on
+## First of all this guide will help you to install squid server on
 Ubuntu with single IP and multiple ports
 ## with Firewall rules you should run all commands using "root" user
 or "sudo" command
@@ -6,17 +6,17 @@ or "sudo" command
 # Step 1 Squid Installation
 apt-get update
 apt-get upgrade
-apt-get install apache2-utils squid3 iptables-persistent -y
+apt-get install apache2-utils squid iptables-persistent -y
 # Step 2 adding user to use it with proxy server
-htpasswd -c /etc/squid3/passwd user1
+htpasswd -c /etc/squid/passwd user1
 ## If you want to add other user
-htpasswd /etc/squid3/passwd user2
+htpasswd /etc/squid/passwd user2
 # Step 3 configure Squid3
-cp /etc/squid3/squid.conf /etc/squid3/squid.conf.backup
-echo "" > /etc/squid3/squid.conf
+cp /etc/squid/squid.conf /etc/squid/squid.conf.backup
+echo "" > /etc/squid/squid.conf
 ## Open configuration file press < i > to go in insert mode so you can
 edit this file
-vim /etc/squid3/squid.conf
+vim /etc/squid/squid.conf
 ## Then add below line in squid.conf file
 ###################################################################
 ### Port configuration section ###
@@ -163,13 +163,13 @@ acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
 acl SSL_ports port 1-65535
 acl Safe_ports port 1-65535
 acl CONNECT method CONNECT
-acl siteblacklist dstdomain "/etc/squid3/blacklist.acl"
+acl siteblacklist dstdomain "/etc/squid/blacklist.acl"
 http_access allow manager localhost
 http_access deny manager
 http_access deny !Safe_ports
 http_access deny CONNECT !SSL_ports
 http_access deny siteblacklist
-auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid3/
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/
 passwd
 auth_param basic children 5
 auth_param basic realm Squid proxy-caching web server
@@ -237,7 +237,7 @@ service iptables-persistent save
 service iptables-persistent restart
 ###################################################################
 # Step 6 run this command to restart your squid server
-service squid3 restart
+service squid restart
 ###################################################################
 ## Now your squid server ready to Go with your server IP address and
 ports you add to squid configuration
