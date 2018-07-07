@@ -329,9 +329,9 @@ def main():
 
                 handlemultipleuseradd(userdict)
                 print "Added users"
-                configuration_copy_handler(squidconfig)
+                #configuration_copy_handler(squidconfig)
                 print "Copied my config file"
-                firewall_configuration(SQUID_CONFIGURATION_PATH)
+                #firewall_configuration(SQUID_CONFIGURATION_PATH)
                 print "Configuration Done...."
                 print "Sucesssfully Completed!"
                 print "Say thanks to Deb"
